@@ -31,7 +31,17 @@ sap.ui.define([
 
                 // set the device model
                 this.setModel(models.createDeviceModel(), "device");
-                MessageBox.success("Project 1234567 was created and assigned to team \"ABC\".");
+                if (!this.dialogFragment) {
+                    this.dialogFragment = sap.ui.xmlfragment("shellplugin.project1.fragment.Popup", this);
+                    sap.ui.getCore().byId("cancelBtn").attachPress(function(){
+                        this.dialogFragment.close();
+                    }.bind(this)); 
+                }
+                            
+                this.dialogFragment.attachAfterClose(function() {
+                    this.destroy(); // view is destroyed as a video plays inside
+                });
+                this.dialogFragment.open();
             }
         });
     }
